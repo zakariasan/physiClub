@@ -1,0 +1,46 @@
+import * as React from "react";
+import Box from "@mui/material/Box";
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Typography from '@mui/material/Typography';
+export default function Courses() {
+	return (
+		<Box >
+<h1>My Courses </h1> 
+			<Box elevation={3}> <h1>My Courses1 </h1> </Box>
+			<Box> <h1>My Courses2 </h1> </Box>
+			<Box> <h1>My Courses3 </h1> </Box>
+			<Box> <h1>My Courses4 </h1> </Box>
+			
+<List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <ListItem alignItems="flex-start">
+               <ListItemText
+          primary="Brunch this weekend?"
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                Ali Connors
+              </Typography>
+              {" — I'll be in your neighborhood doing errands this…"}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+	  <Divider variant="inset" component="li" />
+
+
+
+	  </List>
+
+
+		</Box>
+	);
+}
