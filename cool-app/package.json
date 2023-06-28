@@ -18,15 +18,20 @@
     "@nivo/bar": "^0.83.0",
     "@nivo/geo": "^0.83.0",
     "@nivo/line": "^0.83.0",
+    "@reduxjs/toolkit": "^1.9.5",
+    "dotenv": "^16.3.1",
+    "formik": "^2.4.2",
     "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-big-calendar": "^1.8.1",
     "react-big-calendar-like-google": "^0.0.3",
     "react-dom": "^18.2.0",
     "react-pro-sidebar": "^1.1.0-alpha.1",
-    "react-redux": "^8.1.0",
+    "react-redux": "^8.1.1",
     "react-router-dom": "^6.12.1",
-    "styled-components": "^5.3.11"
+    "redux-persist": "^6.0.0",
+    "styled-components": "^5.3.11",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.37",
