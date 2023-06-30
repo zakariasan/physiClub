@@ -150,8 +150,8 @@ function Nav() {
 							justifyContent: "center",
 						}}
 					>
-						{pages.map((page) => (
-							<Link to={`/${page}`} style={DecorationNone} >
+						{pages.map((page, index) => (
+							<Link to={`/${page}`} style={DecorationNone} key={index}>
 								<Button
 									key={page}
 									onClick={handleCloseNavMenu}
@@ -211,7 +211,9 @@ function Nav() {
 							</>
 						) : (
 							<Button
-								variant="contained"
+							variant="contained"
+							href="/login"
+
 							color="primary"
 								sx={{
 									fontFamily: "Maven Pro",
