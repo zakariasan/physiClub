@@ -7,7 +7,7 @@ const User = require("../models/User.js");
 
 exports.register = async (req, res) => {
 	try {
-		const { firstName, lastName, email, password, role } = req.body;
+		const { firstName, lastName, email, password, role,gender, avatar,birthday, className } = req.body;
 		console.log(req.body)
 		const salty = await bcrypt.genSalt();
 		const passwordHash = await bcrypt.hash(password, 10);
@@ -17,6 +17,10 @@ exports.register = async (req, res) => {
 			email,
 			password:  passwordHash,
 			role,
+			gender,
+			avatar,
+			birthday,
+			className
 		});
 		const savedUser = await newUser.save();
 		res.status(200).json(savedUser);

@@ -15,9 +15,12 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import Alert from "@mui/material/Alert";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
 
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setLogin } from "../state";
@@ -44,21 +47,38 @@ function Copyright(props) {
 
 export default function Form2() {
 	const [pageType, setPageType] = useState("login");
-	const [errno, setErrno] = useState('')
+	const [errno, setErrno] = useState("");
+	const [infos, setInfos] = useState({
+		firstName: "",
+		lastName: "",
+		className: "",
+		email: "",
+		password: "",
+		role: "",
+		gender: "",
+		birthday: null,
+	});
+
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	//const isNonMobile = useMediaQuery("(min-width:600px)");
 	const isLogin = pageType === "login";
 	const isRegister = pageType === "register";
+
 	const register = async (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
 		const values = {
 			firstName: data.get("firstName"),
 			lastName: data.get("lastName"),
+			avatar: await fetch(
+				`https://api.multiavatar.com/${infos.firstName}?apikey=J6gwM1OXWQ9U2H`
+			).then((res) => res.text()),
 			email: data.get("email"),
 			password: data.get("password"),
 			role: data.get("role"),
+			gender: data.get("gender"),
+			birthday: infos.birthday,
+			className: data.get("className"),
 		};
 		const savedUserResponse = await fetch(
 			"http://localhost:1337/auth/register",
@@ -70,47 +90,53 @@ export default function Form2() {
 		);
 		const savedUser = await savedUserResponse.json();
 
-		console.log(values);
 		if (savedUser) {
 			setPageType("login");
 		}
 	};
 
 	const login = async (event) => {
+		event.preventDefault();
+		const data = new FormData(event.currentTarget);
+		const values = {
+			email: data.get("email"),
+			password: data.get("password"),
+		};
 
-			event.preventDefault();
-			const data = new FormData(event.currentTarget);
-			const values = {
-				email: data.get("email"),
-				password: data.get("password"),
-			};
+		const loggedInResponse = await fetch(
+			"http://localhost:1337/auth/login",
+			{
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(values),
+			}
+		);
+		const loggedIn = await loggedInResponse.json();
 
-			const loggedInResponse = await fetch(
-				"http://localhost:1337/auth/login",
-				{
-					method: "POST",
-					headers: { "Content-Type": "application/json" },
-					body: JSON.stringify(values),
-				}
+		console.log(loggedInResponse, loggedIn);
+		if (loggedInResponse.status == 200) {
+			dispatch(
+				setLogin({
+					user: loggedIn.user,
+					token: loggedIn.token,
+				})
 			);
-			const loggedIn = await loggedInResponse.json();
 
-
-		console.log(loggedInResponse, loggedIn)
-			if (loggedInResponse.status == 200 ) {
-				dispatch(
-					setLogin({
-						user: loggedIn.user,
-						token: loggedIn.token,
-					})
-				);
-
-				navigate("/dashboard");
-			}else{
-			console.log(loggedIn.msg);
-				let err  =loggedIn.msg
-				setErrno((<Alert severity="error">{err}!</Alert>))
+			navigate("/dashboard");
+		} else {
+			let err = loggedIn.msg;
+			setErrno(<Alert severity="error">{err}!</Alert>);
 		}
+		setInfos({
+			firstName: "",
+			lastName: "",
+			className: "",
+			email: "",
+			password: "",
+			role: "",
+			gender: "",
+			birthday: null,
+		});
 	};
 
 	const handleSubmit = async (event) => {
@@ -154,6 +180,13 @@ export default function Form2() {
 									id="firstName"
 									label="First Name"
 									autoFocus
+									value={infos.firstName}
+									onChange={(e) =>
+										setInfos({
+											...infos,
+											firstName: e.target.value,
+										})
+									}
 								/>
 							</Grid>
 							<Grid item xs={12} sm={6}>
@@ -164,10 +197,17 @@ export default function Form2() {
 									label="Last Name"
 									name="lastName"
 									autoComplete="family-name"
+									value={infos.lastName}
+									onChange={(e) =>
+										setInfos({
+											...infos,
+											lastName: e.target.value,
+										})
+									}
 								/>
 							</Grid>
 
-							<Grid item xs={12} sm={12}>
+							<Grid item xs={12} sm={6}>
 								<InputLabel id="role">Role</InputLabel>
 								<Select
 									labelId="role"
@@ -176,11 +216,76 @@ export default function Form2() {
 									name="role"
 									required
 									fullWidth
-									value="Student"
+									value={infos.role}
+									onChange={(e) =>
+										setInfos({
+											...infos,
+											role: e.target.value,
+										})
+									}
 								>
 									<MenuItem value="Teacher">Teacher</MenuItem>
 									<MenuItem value="Student">Student</MenuItem>
 								</Select>
+							</Grid>
+							<Grid item xs={12} sm={6}>
+								<InputLabel id="gender">Gender</InputLabel>
+								<Select
+									labelId="gender"
+									id="gender"
+									label="Gender"
+									name="gender"
+									required
+									fullWidth
+									value={infos.gender}
+									onChange={(e) =>
+										setInfos({
+											...infos,
+											gender: e.target.value,
+										})
+									}
+								>
+									<MenuItem value="Male">Male</MenuItem>
+									<MenuItem value="Female">Female</MenuItem>
+								</Select>
+							</Grid>
+
+							<Grid item xs={12} sm={5}>
+								<LocalizationProvider
+									dateAdapter={AdapterDayjs}
+								>
+									<DatePicker
+										labelId="birthday"
+										id="birthday"
+										label="birthday"
+										name="birthday"
+										inputFormat="MM/DD/YYYY"
+										value={infos.birthday}
+										onChange={(e) =>
+											setInfos({
+												...infos,
+												birthday: e.$d.toString(),
+											})
+										}
+									/>
+								</LocalizationProvider>
+							</Grid>
+							<Grid item xs={12} sm={7}>
+								<TextField
+									required
+									fullWidth
+									id="className"
+									label="class Name"
+									name="className"
+									autoComplete="class Name"
+									value={infos.className}
+									onChange={(e) =>
+										setInfos({
+											...infos,
+											className: e.target.value,
+										})
+									}
+								/>
 							</Grid>
 						</Grid>
 					)}
@@ -194,6 +299,10 @@ export default function Form2() {
 						name="email"
 						autoComplete="email"
 						autoFocus
+						value={infos.email}
+						onChange={(e) =>
+							setInfos({ ...infos, email: e.target.value })
+						}
 					/>
 					<TextField
 						margin="normal"
@@ -204,6 +313,10 @@ export default function Form2() {
 						type="password"
 						id="password"
 						autoComplete="current-password"
+						value={infos.password}
+						onChange={(e) =>
+							setInfos({ ...infos, password: e.target.value })
+						}
 					/>
 					<FormControlLabel
 						control={<Checkbox value="remember" color="primary" />}

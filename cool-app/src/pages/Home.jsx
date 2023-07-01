@@ -50,13 +50,15 @@ const Landing = () => {
 											borderRadius: "20px",
 										}}
 										color="neutral"
+
+										href='/login'
 									>
 										<Avatar
 											alt="i_teacher"
 											src={i_teacher}
 										sx={{
 											marginX: "10px",
-										 }}
+										}}
 										/>
 										Teacher
 									</Button>
@@ -68,6 +70,7 @@ const Landing = () => {
 											marginX: "10px",
 									}}
 										color="neutral"
+									href='/login'
 									>
 										<Avatar
 											alt="i_student"
