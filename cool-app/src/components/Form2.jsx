@@ -71,7 +71,7 @@ export default function Form2() {
 			firstName: data.get("firstName"),
 			lastName: data.get("lastName"),
 			avatar: await fetch(
-				`https://api.multiavatar.com/${infos.firstName}?apikey=J6gwM1OXWQ9U2H`
+				`https://api.multiavatar.com/${infos.firstName}.svg?apikey=J6gwM1OXWQ9U2H`
 			).then((res) => res.text()),
 			email: data.get("email"),
 			password: data.get("password"),

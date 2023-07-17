@@ -124,7 +124,7 @@ export default function AsideDash() {
 						<MenuIcon />
 					</IconButton>
 					<Typography variant="h3" noWrap component="div">
-						Mini variant drawer
+                PhysiClub ...
 					</Typography>
 				</Toolbar>
 			</AppBar>

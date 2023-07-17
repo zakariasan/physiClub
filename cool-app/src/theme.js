@@ -65,6 +65,13 @@ export const themeSettings =() => {
               default: colorTokens.prime[300],
               alt: colorTokens.prime[100],
             },
+ /*// palette values for light mode*/
+            primary22: {
+              dark: colorTokens.primary[700],
+              main: colorTokens.primary[500],
+              light: colorTokens.primary[50],
+            },
+
           }
        /* : {*/
             /*// palette values for light mode*/
