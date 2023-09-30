@@ -28,6 +28,8 @@ exports.register = async (req, res) => {
 //***>login in
 exports.login = async (req, res) => {
   try {
+
+	console.log(req.body)
     const { email, password } = req.body;
     const user = await User.findOne({ email: email });
 
@@ -40,6 +42,8 @@ exports.login = async (req, res) => {
     delete user.password;
     res.status(200).json({ token, user });
   } catch (err) {
+
+	console.log("Eroooooooor",err)
     res.status(500).json({ error: err.message });
   }
 };
