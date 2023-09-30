@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { setLogin } from "../data/actions.js";
+import { useDispatch } from "react-redux";
 
 import backDor from "../assets/backDor.jpeg";
 import phy from "../assets/vite.svg";
@@ -14,6 +17,8 @@ function Register() {
     gender: "Male", // Default gender
   });
 
+  const history = useNavigate();
+  const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -34,6 +39,9 @@ function Register() {
       );
 
       if (res.status === 200) {
+        const { user, token } = res.data;
+        dispatch(setLogin(user, token));
+        history('/dash');
         console.log("loged Successfuly");
       }
     } catch (err) {
@@ -102,6 +110,7 @@ function Register() {
                 value={formData.email}
                 onChange={handleChange}
                 required
+	  autoComplete="email"
                 placeholder="your@email.com"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
               />
@@ -139,13 +148,14 @@ function Register() {
               />
             </div>
             <div className="flex flex-col pt-4">
-              <label htmlFor="Gender" className="text-lg">
+              <label htmlFor="gender" className="text-lg">
                 Gender:
               </label>
               <label>
                 <input
                   type="radio"
                   name="gender"
+	  id="gender"
                   value="Male"
                   checked={formData.gender === "Male"}
                   onChange={handleChange}
@@ -169,7 +179,7 @@ function Register() {
             <input
               type="submit"
               value="Register"
-              className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+              className="cursor-pointer avtive:bg-black-600 rounded bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
             />
           </form>
           <div className="text-center pt-12 pb-12">

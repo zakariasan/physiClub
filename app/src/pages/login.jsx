@@ -1,14 +1,20 @@
 import React, { useState } from "react";
+import {useNavigate} from 'react-router-dom'
+import {setLogin} from '../data/actions.js'
+import { useDispatch } from "react-redux";
 import backDor from "../assets/backDor.jpeg";
 import phy from "../assets/vite.svg";
 
 import axios from "axios";
+
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
 
+	const history = useNavigate();
+	const dispatch = useDispatch();
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -19,15 +25,17 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here, e.g., send data to the server or perform validation.
 
     try {
       const res = await axios.post(
         "http://localhost:1337/auth/login",
         formData,
       );
-console.log(res)
+      console.log(res);
       if (res.status === 200) {
+	      const {user, token} = res.data;
+	      dispatch(setLogin(user, token))	
+	      history('/dash');
         console.log("loged Successfuly");
       }
     } catch (err) {
@@ -54,10 +62,10 @@ console.log(res)
               </label>
               <input
                 type="email"
-	  name="email"
+                name="email"
                 id="email"
-	  value={formData.email}
-	  onChange={handleChange}
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="your@email.com"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
               />
@@ -69,10 +77,10 @@ console.log(res)
               </label>
               <input
                 type="password"
-	  name="password"
-	  value={formData.password}
-	  required
-	  onChange={handleChange}
+                name="password"
+                value={formData.password}
+                required
+                onChange={handleChange}
                 id="password"
                 placeholder="Password"
                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline"
@@ -82,7 +90,7 @@ console.log(res)
             <input
               type="submit"
               value="Log In"
-              className="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
+              className="cursor-pointer avtive:bg-black-600 rounded bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8"
             />
           </form>
           <div className="text-center pt-12 pb-12">
