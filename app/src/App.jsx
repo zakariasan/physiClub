@@ -3,6 +3,7 @@ import Land from "./pages/landing.jsx";
 import Login from "./pages/login.jsx";
 import Register from "./pages/register.jsx";
 import Dash from "./pages/dash.jsx";
+
 function App() {
   return (
     <Router>
